@@ -140,6 +140,12 @@ TORCH_LIBRARY_EXPAND(TORCH_EXTENSION_NAME, xpu_ops) {
       torch::kXPU,
       &fused_kimi_k3_mla_decode_q_concat_kv_cache_insert);
 
+  xpu_ops.def(
+      "fused_kimi_k3_mla_kv_concat(Tensor k_nope, Tensor k_pe, Tensor! k_out) "
+      "-> ()");
+  xpu_ops.impl(
+      "fused_kimi_k3_mla_kv_concat", torch::kXPU, &fused_kimi_k3_mla_kv_concat);
+
   // DeepSeek-V4 inverse RoPE (bf16): fused inv GPT-J rotation + group-major
   // layout transform.
   xpu_ops.def(

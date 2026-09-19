@@ -166,6 +166,11 @@ void fused_kimi_k3_mla_decode_q_concat_kv_cache_insert(
     std::optional<torch::Tensor> position_ids,
     std::optional<torch::Tensor> cos_sin_cache);
 
+void fused_kimi_k3_mla_kv_concat(
+    const torch::Tensor& k_nope,
+    const torch::Tensor& k_pe,
+    torch::Tensor& k_out);
+
 torch::Tensor deepseek_inv_rope_bf16(
     const torch::Tensor& attn_output,
     const torch::Tensor& positions,

@@ -687,6 +687,7 @@ if(XPU_SPECIFIC_KERNELS_ENABLED)
       "csrc/xpu/sycl/deepseek_qnorm_rope_kv_insert.cpp"
       "csrc/xpu/sycl/kimi_k3_mla_prefill.cpp"
       "csrc/xpu/sycl/kimi_k3_mla_decode.cpp"
+      "csrc/xpu/sycl/kimi_k3_mla_kv_concat.cpp"
       "csrc/xpu/sycl/deepseek_inv_rope_bf16.cpp"
       "csrc/xpu/sycl/deepseek_inv_rope_fp8_quant.cpp"
       "csrc/xpu/sycl/deepseek_fused_indexer_q_rope_fp8.cpp"
