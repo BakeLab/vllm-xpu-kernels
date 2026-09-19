@@ -1,4 +1,4 @@
-#include <ATen/xpu/CachingHostAllocator.h>
+#include <ATen/core/CachingHostAllocator.h>
 #include <sycl/sycl.hpp>
 
 #include <cstddef>

@@ -410,14 +410,14 @@ void RemapHiddenStatesLauncher(
 
 void remap_hidden_states(
     torch::Tensor& hidden_states,  // [num_rows, hidden_size]
-    const c10::optional<torch::Tensor>&
+    const std::optional<torch::Tensor>&
         hidden_states_scales,  // [num_rows, hidden_size // block_k] or empty
     torch::Tensor& remapped_hidden_states,  // [num_rows * TopK,
                                             // hidden_size]
-    const c10::optional<torch::Tensor>&
+    const std::optional<torch::Tensor>&
         remapped_hidden_states_scales,  // [num_rows, hidden_size // block_k] or
                                         // empty
-    const c10::optional<torch::Tensor>& expert_map,  // [total_experts_num]
+    const std::optional<torch::Tensor>& expert_map,  // [total_experts_num]
     torch::Tensor& rows_per_expert,                  // [local_experts_num]
     torch::Tensor& unpermuted_row_to_permuted_row,   // [num_rows, TopK]
     torch::Tensor& topk_ids,                         // [num_rows, TopK]

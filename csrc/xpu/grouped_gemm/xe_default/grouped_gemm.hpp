@@ -32,7 +32,7 @@ void kernel_functor(
 at::Tensor grouped_gemm_func(
     at::Tensor& ptr_A,
     at::Tensor& ptr_B,
-    const c10::optional<at::Tensor>& ptr_bias,
+    const std::optional<at::Tensor>& ptr_bias,
     at::Tensor& ptr_D,
     at::Tensor& expert_first_token_offset,
     int64_t N,

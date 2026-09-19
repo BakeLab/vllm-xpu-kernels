@@ -274,7 +274,7 @@ std::tuple<torch::Tensor, torch::Tensor> deepseek_scaling_rope(
     const torch::Tensor& positions,
     const torch::Tensor& query,
     const torch::Tensor& key,
-    const c10::optional<torch::Tensor>& offsets_opt,
+    const std::optional<torch::Tensor>& offsets_opt,
     const torch::Tensor& cos_sin_cache,
     int64_t rotary_dim,
     bool is_neox) {

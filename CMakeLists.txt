@@ -44,7 +44,7 @@ set(SYCL_SUPPORTED_ARCHS "intel_gpu_pvc;intel_gpu_bmg_g21;intel_gpu_bmg_g31")
 #
 # TODO: we need to align torch version with used in vLLM.
 #
-set(TORCH_SUPPORTED_VERSION_XPU "2.14.0")
+set(TORCH_SUPPORTED_VERSION_XPU "2.15.0")
 
 set(BUILD_SYCL_TLA_KERNELS
     ON
@@ -252,8 +252,8 @@ if(VLLM_GPU_LANG STREQUAL "SYCL")
   # VLLM_XPU_AOT_DEVICES and VLLM_XPU_XE2_AOT_DEVICES Example: export
   # VLLM_XPU_AOT_DEVICES="pvc,bmg-g21-a0" export
   # VLLM_XPU_XE2_AOT_DEVICES="pvc,bmg-g31-a0"
-  set(AOT_DEVICES "pvc,bmg,bmg-g21-a0,bmg-g31-a0")
-  set(XE2_AOT_DEVICES "pvc,bmg,bmg-g21-a0,bmg-g31-a0")
+  set(AOT_DEVICES "bmg-g31-a0")
+  set(XE2_AOT_DEVICES "bmg-g31-a0")
   # XE3 (Xe3p / CRI) AOT targets. Only used when VLLM_XPU_ENABLE_XE3P is ON;
   # add_xe3_kernel_library links the XE3 kernel lib for these devices.
   set(XE3_AOT_DEVICES "cri,cri-a0")
@@ -285,7 +285,8 @@ if(VLLM_GPU_LANG STREQUAL "SYCL")
   list(APPEND SYCL_FLAGS "-Wno-unused-command-line-argument")
 
   set(SYCL_COMPILE_FLAGS ${SYCL_FLAGS})
-  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG")
+  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG"
+                         "-std=gnu++23")
   if(AOT_DEVICES)
     set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} -fsycl-targets=spir64_gen)
   endif()
@@ -442,7 +443,7 @@ if(BUILD_SYCL_TLA_KERNELS)
     list(APPEND SYCL_TLA_COMPILE_OPTIONS -DVLLM_XPU_ENABLE_XE_DEFAULT)
   endif()
   if(VLLM_XPU_ENABLE_XE2)
-    include_directories(${CMAKE_SOURCE_DIR}/csrc)
+    include_directories(${PROJECT_SOURCE_DIR}/csrc)
     if(MOE_KERNELS_ENABLED)
       add_subdirectory(csrc/xpu/grouped_gemm/xe_2)
       list(APPEND GROUPED_GEMM_LIB_NAME "grouped_gemm_xe_2")
@@ -466,7 +467,7 @@ if(BUILD_SYCL_TLA_KERNELS)
     list(APPEND SYCL_TLA_COMPILE_OPTIONS -DVLLM_XPU_ENABLE_XE2)
   endif()
   if(VLLM_XPU_ENABLE_XE3P)
-    include_directories(${CMAKE_SOURCE_DIR}/csrc)
+    include_directories(${PROJECT_SOURCE_DIR}/csrc)
     # The CRI/Xe3p SYCL target is selected via a compile define so headers can
     # branch on it (mirrors intel_gpu_cri DPC++ target above).
     list(APPEND SYCL_TLA_KERNELS_COMPILE_FLAGS
@@ -554,7 +555,7 @@ if(XPUMEM_ALLOCATOR_ENABLED)
   python_add_library(xpumem_allocator MODULE USE_SABI 3 WITH_SOABI
                      "${XPUMEM_ALLOCATOR_SRC}")
 
-  set_property(TARGET xpumem_allocator PROPERTY CXX_STANDARD 20)
+  set_property(TARGET xpumem_allocator PROPERTY CXX_STANDARD 23)
 
   if(VLLM_GPU_LANG STREQUAL "SYCL")
     target_compile_options(xpumem_allocator PRIVATE ${VLLM_GPU_COMPILE_FLAGS})
@@ -684,6 +685,7 @@ if(XPU_SPECIFIC_KERNELS_ENABLED)
       "csrc/xpu/sampler/compact_sampling_mask.cpp"
       "csrc/xpu/sycl/deepseek_scaling_rope.cpp"
       "csrc/xpu/sycl/deepseek_qnorm_rope_kv_insert.cpp"
+      "csrc/xpu/sycl/kimi_k3_mla_prefill.cpp"
       "csrc/xpu/sycl/deepseek_inv_rope_bf16.cpp"
       "csrc/xpu/sycl/deepseek_inv_rope_fp8_quant.cpp"
       "csrc/xpu/sycl/deepseek_fused_indexer_q_rope_fp8.cpp"

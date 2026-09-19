@@ -184,7 +184,7 @@ static inline void dnnl_matmul_w8a8_fp8(
   }
   int scratchpad_size = matmul_ext.get_scratchpad_size();
   torch::Tensor scratchpad_tensor = at::empty(
-      {scratchpad_size}, mat1.options().dtype(at::kByte), c10::nullopt);
+      {scratchpad_size}, mat1.options().dtype(at::kByte), std::nullopt);
   arg_handles.emplace_back(DNNL_ARG_SCRATCHPAD, scratchpad_tensor.data_ptr());
 
   auto& strm = GpuStreamManager::Instance().get_stream();
@@ -436,7 +436,7 @@ static inline void dnnl_batch_matmul_w8a8_fp8(
   }
   int scratchpad_size = matmul_ext.get_scratchpad_size();
   torch::Tensor scratchpad_tensor = at::empty(
-      {scratchpad_size}, mat1.options().dtype(at::kByte), c10::nullopt);
+      {scratchpad_size}, mat1.options().dtype(at::kByte), std::nullopt);
   arg_handles.emplace_back(DNNL_ARG_SCRATCHPAD, scratchpad_tensor.data_ptr());
 
   auto& strm = GpuStreamManager::Instance().get_stream();
