@@ -16,8 +16,8 @@ def test_kimi_k3_mla_bf16_prefill(tokens, heads, block_size, use_rope):
     q = torch.randn(tokens, heads, 192, device=device, dtype=torch.bfloat16)
     q_ref = q.clone()
     nope = torch.randn(tokens, heads, 128, device=device, dtype=torch.bfloat16)
-    pe_base = torch.randn(tokens, 128, device=device, dtype=torch.bfloat16)
-    pe = pe_base[:, ::2]
+    pe_storage = torch.randn(tokens, 2, 64, device=device, dtype=torch.bfloat16)
+    pe = pe_storage[:, 0, :]  # contiguous inner dimension, padded row stride
     latent = torch.randn(tokens, 512, device=device, dtype=torch.bfloat16)
     cache = torch.zeros(4, block_size, 576, device=device, dtype=torch.bfloat16)
     ref_cache = cache.clone()
