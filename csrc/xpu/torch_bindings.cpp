@@ -126,8 +126,19 @@ TORCH_LIBRARY_EXPAND(TORCH_EXTENSION_NAME, xpu_ops) {
       "k_cache, Tensor slot_mapping, int cache_block_size, Tensor? "
       "position_ids=None, Tensor? cos_sin_cache=None) -> ()");
   xpu_ops.impl(
-      "fused_kimi_k3_mla_key_concat_kv_cache_insert", torch::kXPU,
+      "fused_kimi_k3_mla_key_concat_kv_cache_insert",
+      torch::kXPU,
       &fused_kimi_k3_mla_key_concat_kv_cache_insert);
+
+  xpu_ops.def(
+      "fused_kimi_k3_mla_decode_q_concat_kv_cache_insert(Tensor ql_nope, "
+      "Tensor q_pe, Tensor kv_c_normed, Tensor k_pe, Tensor! mqa_q, "
+      "Tensor! k_cache, Tensor slot_mapping, int cache_block_size, "
+      "Tensor? position_ids=None, Tensor? cos_sin_cache=None) -> ()");
+  xpu_ops.impl(
+      "fused_kimi_k3_mla_decode_q_concat_kv_cache_insert",
+      torch::kXPU,
+      &fused_kimi_k3_mla_decode_q_concat_kv_cache_insert);
 
   // DeepSeek-V4 inverse RoPE (bf16): fused inv GPT-J rotation + group-major
   // layout transform.
