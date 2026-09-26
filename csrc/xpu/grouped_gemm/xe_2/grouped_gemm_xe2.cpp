@@ -5,8 +5,8 @@
 torch::Tensor cutlass_grouped_gemm_xe2(
     torch::Tensor ptr_A,
     torch::Tensor ptr_B,
-    const c10::optional<at::Tensor>& ptr_scales,
-    const c10::optional<at::Tensor>& ptr_bias,
+    const std::optional<at::Tensor>& ptr_scales,
+    const std::optional<at::Tensor>& ptr_bias,
     torch::Tensor ptr_D,
     torch::Tensor rows_per_expert,
     int64_t N,

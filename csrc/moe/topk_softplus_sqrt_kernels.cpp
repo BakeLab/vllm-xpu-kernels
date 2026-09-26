@@ -624,10 +624,10 @@ void dispatch_topk_softplus_sqrt_launch(
     int topk,
     bool renormalize,
     double routed_scaling_factor,
-    const c10::optional<torch::Tensor>& correction_bias,
-    const c10::optional<torch::Tensor>& input_ids,
-    const c10::optional<torch::Tensor>& tid2eid,
-    const c10::optional<torch::Tensor>& is_padding,
+    const std::optional<torch::Tensor>& correction_bias,
+    const std::optional<torch::Tensor>& input_ids,
+    const std::optional<torch::Tensor>& tid2eid,
+    const std::optional<torch::Tensor>& is_padding,
     sycl::queue& q) {
   const float* bias_ptr = nullptr;
   if (correction_bias.has_value()) {
@@ -746,10 +746,10 @@ void topk_softplus_sqrt(
     torch::Tensor& gating_output,
     bool renormalize,
     double routed_scaling_factor,
-    const c10::optional<torch::Tensor>& correction_bias,
-    const c10::optional<torch::Tensor>& input_ids,
-    const c10::optional<torch::Tensor>& tid2eid,
-    const c10::optional<torch::Tensor>& is_padding) {
+    const std::optional<torch::Tensor>& correction_bias,
+    const std::optional<torch::Tensor>& input_ids,
+    const std::optional<torch::Tensor>& tid2eid,
+    const std::optional<torch::Tensor>& is_padding) {
   const int num_experts = gating_output.size(-1);
   const auto num_tokens = gating_output.numel() / num_experts;
   const int topk = topk_weights.size(-1);

@@ -76,10 +76,10 @@ torch::Tensor int4_gemm_w4a8(
 #ifdef VLLM_MOE_ENABLED
 torch::Tensor cutlass_grouped_gemm_interface(
     torch::Tensor ptr_A,
-    const c10::optional<at::Tensor>& ptr_A_scale,
+    const std::optional<at::Tensor>& ptr_A_scale,
     torch::Tensor ptr_B,
-    const c10::optional<at::Tensor>& ptr_B_scale,
-    const c10::optional<at::Tensor>& ptr_bias,
+    const std::optional<at::Tensor>& ptr_B_scale,
+    const std::optional<at::Tensor>& ptr_bias,
     torch::Tensor ptr_D,
     torch::Tensor rows_per_expert,
     int64_t N,
@@ -91,7 +91,7 @@ std::tuple<at::Tensor, at::Tensor> deepseek_scaling_rope(
     const at::Tensor& positions,
     const at::Tensor& query,
     const at::Tensor& key,
-    const c10::optional<at::Tensor>& offsets_opt,
+    const std::optional<at::Tensor>& offsets_opt,
     const at::Tensor& cos_sin_cache,
     int64_t rotary_dim,
     bool is_neox);
@@ -370,7 +370,7 @@ torch::Tensor fp8_paged_mqa_logits(
     const torch::Tensor& weights,
     const torch::Tensor& context_lens,
     const torch::Tensor& block_tables,
-    const c10::optional<at::Tensor>& schedule_metadata,
+    const std::optional<at::Tensor>& schedule_metadata,
     int64_t max_model_len);
 #endif
 

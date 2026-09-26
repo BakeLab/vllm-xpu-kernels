@@ -5,8 +5,8 @@
 #include "utils.h"
 #include "dispatch_utils.h"
 
-#include <c10/util/Float8_e4m3fn.h>
-#include <c10/util/Float8_e5m2.h>
+#include <torch/headeronly/util/Float8_e4m3fn.h>
+#include <torch/headeronly/util/Float8_e5m2.h>
 #include "quantization/fp8/quant_utils.h"
 
 #define VLLM_LDG(arg) *(arg)

@@ -82,9 +82,9 @@ function(hipify_sources_target OUT_SRCS NAME ORIG_SRCS)
   set(CSRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/csrc)
   add_custom_target(
     hipify${NAME}
-    COMMAND ${CMAKE_SOURCE_DIR}/cmake/hipify.py -p ${CMAKE_SOURCE_DIR}/csrc -o
+    COMMAND ${PROJECT_SOURCE_DIR}/cmake/hipify.py -p ${PROJECT_SOURCE_DIR}/csrc -o
             ${CSRC_BUILD_DIR} ${SRCS}
-    DEPENDS ${CMAKE_SOURCE_DIR}/cmake/hipify.py ${SRCS}
+    DEPENDS ${PROJECT_SOURCE_DIR}/cmake/hipify.py ${SRCS}
     BYPRODUCTS ${HIP_SRCS}
     COMMENT "Running hipify on ${NAME} extension source files.")
 
@@ -573,7 +573,7 @@ function(add_xe2_kernel_library LIBRARY_NAME)
 
   # Optionally add CMAKE_SOURCE_DIR
   if(ARG_INCLUDE_CMAKE_SOURCE_DIR)
-    target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
   endif()
 
   # Set C++ standard
@@ -591,10 +591,10 @@ function(add_xe2_kernel_library LIBRARY_NAME)
 
   message(
     STATUS
-      "Setting library output directory for target '${LIBRARY_NAME}' to '${CMAKE_BINARY_DIR}/'."
+      "Setting library output directory for target '${LIBRARY_NAME}' to '${PROJECT_BINARY_DIR}/'."
   )
   set_target_properties(${LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                   "${CMAKE_BINARY_DIR}/")
+                                                   "${PROJECT_BINARY_DIR}/")
   install(TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION ${ARG_DESTINATION}
                                           COMPONENT ${LIBRARY_NAME})
 
@@ -653,7 +653,7 @@ function(add_xe3_kernel_library LIBRARY_NAME)
 
   # Optionally add CMAKE_SOURCE_DIR
   if(ARG_INCLUDE_CMAKE_SOURCE_DIR)
-    target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
   endif()
 
   # Set compile options and definitions
@@ -684,10 +684,10 @@ function(add_xe3_kernel_library LIBRARY_NAME)
 
   message(
     STATUS
-      "Setting library output directory for target '${LIBRARY_NAME}' to '${CMAKE_BINARY_DIR}/'."
+      "Setting library output directory for target '${LIBRARY_NAME}' to '${PROJECT_BINARY_DIR}/'."
   )
   set_target_properties(${LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                   "${CMAKE_BINARY_DIR}/")
+                                                   "${PROJECT_BINARY_DIR}/")
   install(TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION ${ARG_DESTINATION}
                                           COMPONENT ${LIBRARY_NAME})
 
@@ -744,7 +744,7 @@ function(add_xe_default_kernel_library LIBRARY_NAME)
 
   # Optionally add CMAKE_SOURCE_DIR
   if(ARG_INCLUDE_CMAKE_SOURCE_DIR)
-    target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
   endif()
 
   # Set C++ standard
@@ -761,7 +761,7 @@ function(add_xe_default_kernel_library LIBRARY_NAME)
   target_link_libraries(${LIBRARY_NAME} PRIVATE torch)
   target_link_libraries(${LIBRARY_NAME} PRIVATE ${TORCH_LIBRARIES})
   set_target_properties(${LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                   "${CMAKE_BINARY_DIR}/")
+                                                   "${PROJECT_BINARY_DIR}/")
   install(TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION ${ARG_DESTINATION}
                                           COMPONENT ${LIBRARY_NAME})
 

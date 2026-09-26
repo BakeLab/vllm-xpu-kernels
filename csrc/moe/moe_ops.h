@@ -76,10 +76,10 @@ void topk_softplus_sqrt(
     torch::Tensor& gating_output,
     bool renormalize,
     double routed_scaling_factor,
-    const c10::optional<torch::Tensor>& correction_bias,
-    const c10::optional<torch::Tensor>& input_ids,
-    const c10::optional<torch::Tensor>& tid2eid,
-    const c10::optional<torch::Tensor>& is_padding);
+    const std::optional<torch::Tensor>& correction_bias,
+    const std::optional<torch::Tensor>& input_ids,
+    const std::optional<torch::Tensor>& tid2eid,
+    const std::optional<torch::Tensor>& is_padding);
 
 void moe_gather(
     torch::Tensor& output,
@@ -96,10 +96,10 @@ void init_expert_map(
 
 void remap_hidden_states(
     torch::Tensor& hidden_states,
-    const c10::optional<torch::Tensor>& hidden_states_scales,
+    const std::optional<torch::Tensor>& hidden_states_scales,
     torch::Tensor& remapped_hidden_states,
-    const c10::optional<torch::Tensor>& remapped_hidden_states_scales,
-    const c10::optional<torch::Tensor>& expert_map,
+    const std::optional<torch::Tensor>& remapped_hidden_states_scales,
+    const std::optional<torch::Tensor>& expert_map,
     torch::Tensor& rows_per_expert,
     torch::Tensor& unpermuted_row_to_permuted_row,
     torch::Tensor& topk_ids,

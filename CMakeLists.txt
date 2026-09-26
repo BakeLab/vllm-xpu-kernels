@@ -44,7 +44,7 @@ set(SYCL_SUPPORTED_ARCHS "intel_gpu_pvc;intel_gpu_bmg_g21;intel_gpu_bmg_g31")
 #
 # TODO: we need to align torch version with used in vLLM.
 #
-set(TORCH_SUPPORTED_VERSION_XPU "2.13.0")
+set(TORCH_SUPPORTED_VERSION_XPU "2.15.0")
 
 set(BUILD_SYCL_TLA_KERNELS
     ON
@@ -285,7 +285,8 @@ if(VLLM_GPU_LANG STREQUAL "SYCL")
   list(APPEND SYCL_FLAGS "-Wno-unused-command-line-argument")
 
   set(SYCL_COMPILE_FLAGS ${SYCL_FLAGS})
-  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG")
+  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG"
+                         "-std=gnu++23")
   if(AOT_DEVICES)
     set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} -fsycl-targets=spir64_gen)
   endif()
@@ -442,7 +443,7 @@ if(BUILD_SYCL_TLA_KERNELS)
     list(APPEND SYCL_TLA_COMPILE_OPTIONS -DVLLM_XPU_ENABLE_XE_DEFAULT)
   endif()
   if(VLLM_XPU_ENABLE_XE2)
-    include_directories(${CMAKE_SOURCE_DIR}/csrc)
+    include_directories(${PROJECT_SOURCE_DIR}/csrc)
     if(MOE_KERNELS_ENABLED)
       add_subdirectory(csrc/xpu/grouped_gemm/xe_2)
       list(APPEND GROUPED_GEMM_LIB_NAME "grouped_gemm_xe_2")
@@ -466,7 +467,7 @@ if(BUILD_SYCL_TLA_KERNELS)
     list(APPEND SYCL_TLA_COMPILE_OPTIONS -DVLLM_XPU_ENABLE_XE2)
   endif()
   if(VLLM_XPU_ENABLE_XE3P)
-    include_directories(${CMAKE_SOURCE_DIR}/csrc)
+    include_directories(${PROJECT_SOURCE_DIR}/csrc)
     # The CRI/Xe3p SYCL target is selected via a compile define so headers can
     # branch on it (mirrors intel_gpu_cri DPC++ target above).
     list(APPEND SYCL_TLA_KERNELS_COMPILE_FLAGS

@@ -5,8 +5,8 @@
 #include <iostream>
 #include <numeric>
 
-#include <c10/util/Float8_e4m3fn.h>
-#include <c10/util/Float8_e5m2.h>
+#include <torch/headeronly/util/Float8_e4m3fn.h>
+#include <torch/headeronly/util/Float8_e5m2.h>
 
 #include "dispatch_utils.h"
 #include "ops.h"

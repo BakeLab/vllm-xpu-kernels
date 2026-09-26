@@ -177,8 +177,8 @@ void MoEGEMMLauncher(
 at::Tensor cutlass_grouped_gemm_xe2_impl(
     at::Tensor& ptr_A,
     at::Tensor& ptr_B,
-    const c10::optional<at::Tensor>& ptr_scales,
-    const c10::optional<at::Tensor>& ptr_bias,
+    const std::optional<at::Tensor>& ptr_scales,
+    const std::optional<at::Tensor>& ptr_bias,
     at::Tensor& ptr_D,
     at::Tensor& rows_per_expert,
     int64_t N,
@@ -402,8 +402,8 @@ at::Tensor cutlass_grouped_gemm_xe2_impl(
 
     // Rebind ptr_scales for the launcher macro below.
     // MoEGEMMLauncherCallER reads ptr_scales->data_ptr().
-    c10::optional<at::Tensor> scales_opt = scales_nk;
-    const c10::optional<at::Tensor>& ptr_scales_mx = scales_opt;
+    std::optional<at::Tensor> scales_opt = scales_nk;
+    const std::optional<at::Tensor>& ptr_scales_mx = scales_opt;
 #undef MoEGEMMLauncherCallER
 #define MoEGEMMLauncherCallER(                                                 \
     LayoutA,                                                                   \

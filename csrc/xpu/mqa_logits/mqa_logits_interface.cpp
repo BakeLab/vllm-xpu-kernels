@@ -156,7 +156,7 @@ torch::Tensor fp8_paged_mqa_logits(
     const torch::Tensor& weights,
     const torch::Tensor& context_lens,
     const torch::Tensor& block_tables,
-    const c10::optional<at::Tensor>& schedule_metadata,
+    const std::optional<at::Tensor>& schedule_metadata,
     int64_t max_model_len) {
   check_fp8_paged_mqa_inputs(
       q_fp8, kv_cache_fp8, weights, context_lens, block_tables, max_model_len);
