@@ -28,7 +28,10 @@ if (( MAX_JOBS < 1 )); then MAX_JOBS=1; fi
 VLLM_CHUNK_PREFILL_CONFIG=chunk_prefill_default.conf \
 VLLM_PAGED_DECODE_CONFIG=paged_decode_default.conf \
   uv build --no-build-isolation --wheel --out-dir dist-default
-uv build --no-build-isolation --wheel --out-dir dist
+# Set both explicitly: the previous build's CMake cache retains its presets.
+VLLM_CHUNK_PREFILL_CONFIG=chunk_prefill_full.conf \
+VLLM_PAGED_DECODE_CONFIG=paged_decode_full.conf \
+  uv build --no-build-isolation --wheel --out-dir dist
 wheels=(dist/*.whl)
 test "${#wheels[@]}" -eq 1
 VLLM_USE_PRECOMPILED=1 VLLM_PRECOMPILED_WHEEL_LOCATION="${wheels[0]}" \
