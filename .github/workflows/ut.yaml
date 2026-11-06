@@ -31,7 +31,46 @@ env:
 
 jobs:
 
+  build-and-test-breadboard:
+    if: ${{ github.server_url != 'https://github.com' }}
+    runs-on: [self-hosted, linux, x64, bb, xpu]
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: recursive
+
+      # Every BB job gets a fresh VM. Keep the image and its consumers in this
+      # job instead of relying on a registry on a previous runner's localhost.
+      - name: Build XPU environment
+        run: docker build --network host -t xpu-kernel-ci -f Dockerfile.xpu .
+
+      - name: Build and test on the allocated XPU
+        run: |
+          docker run --rm --network host --device /dev/dri \
+            --mount "type=bind,src=$PWD,dst=/workspace" \
+            --workdir /workspace --env XPU_KERNEL_TEST_SCOPE \
+            xpu-kernel-ci bash .github/scripts/breadboard-xpu-tests.sh
+
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xpu-kernel-wheel
+          path: dist/*.whl
+          if-no-files-found: error
+
+      - name: Upload default-config wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xpu-kernel-wheel-default-config
+          path: dist-default/*.whl
+          if-no-files-found: error
+
   build-docker-image-latest-pvc:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-pvc-cpu
     outputs:
       image_tag: ${{ steps.set-tag.outputs.image_tag }}
@@ -61,6 +100,7 @@ jobs:
           docker push "${{ env.REGISTRY }}/xpu-kernel-ci-image:${IMAGE_TAG}"
 
   build-docker-image-latest-bmg:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-bmg
     outputs:
       image_tag: ${{ steps.set-tag.outputs.image_tag }}
@@ -93,6 +133,7 @@ jobs:
   # BMG runner cannot reach PVC directly (different network segment), so the
   # artifact service (GitHub) acts as the neutral transfer point.
   build-wheel:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-pvc-cpu
     needs: build-docker-image-latest-pvc
     container:
@@ -142,6 +183,7 @@ jobs:
           retention-days: 15
 
   build-wheel-with-default-config:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-pvc-cpu
     needs: build-docker-image-latest-pvc
     container:
@@ -195,6 +237,7 @@ jobs:
           retention-days: 7
 
   run-unit-tests-pvc:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-pvc
     needs: [build-docker-image-latest-pvc, build-wheel]
     timeout-minutes: 50
@@ -227,6 +270,7 @@ jobs:
           VLLM_XPU_FORCE_XE_DEFAULT_KERNEL=1 XPU_KERNEL_TEST_SCOPE=${{ env.XPU_KERNEL_TEST_SCOPE }} ZE_AFFINITY_MASK=0,1 SKIP_HANG_KERNEL=1 SKIP_ACC_ERROR_KERNEL=1 pytest -v -s tests/test_fp8_gemm_onednn.py
 
   clean-repo-pvc:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-pvc
     needs: run-unit-tests-pvc
     steps:
@@ -237,6 +281,7 @@ jobs:
           git reset --hard || true
 
   run-unit-tests-bmg:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-bmg
     needs: [build-docker-image-latest-bmg, build-wheel]
     timeout-minutes: 50
@@ -272,6 +317,7 @@ jobs:
           VLLM_XPU_FORCE_XE_DEFAULT_KERNEL=1 XPU_KERNEL_TEST_SCOPE=${{ env.XPU_KERNEL_TEST_SCOPE }} ZE_AFFINITY_MASK=0,1 pytest -v -s tests/fused_moe/test_grouped_gemm.py::test_grouped_gemm
 
   clean-repo-bmg:
+    if: ${{ github.server_url == 'https://github.com' }}
     runs-on: self-hosted-bmg
     needs: run-unit-tests-bmg
     steps:

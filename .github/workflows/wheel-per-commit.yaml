@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-wheel-on-pvc:
-    runs-on: self-hosted-pvc-cpu
+    runs-on: ubuntu-latest
     if: |
       github.event_name == 'workflow_dispatch' || 
       (github.event.workflow_run.conclusion == 'success' && 
@@ -108,7 +108,7 @@ jobs:
           echo "Download: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   clean-repo-pvc:
-    runs-on: self-hosted-pvc-cpu
+    runs-on: ubuntu-latest
     needs: build-wheel-on-pvc
     steps:
       - name: Clean workspace
