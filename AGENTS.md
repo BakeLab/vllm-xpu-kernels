@@ -15,9 +15,8 @@ can dispatch on Intel GPU hardware.
 
 - Prefer current build metadata over stale docs when versions disagree:
   `pyproject.toml`, `setup.py`, `CMakeLists.txt`, and `tools/envs.py`.
-- Python package metadata currently requires Python `>=3.9,<3.14`; CMake still
-  searches `3.9` through `3.12`, so verify interpreter support before changing
-  build behavior.
+- Python package support starts at Python `3.14`; keep package metadata,
+  CMake interpreter search, and CI in sync.
 - PyTorch XPU support is currently `2.13.0+xpu` in `pyproject.toml`, with CMake
   expecting torch `2.13.0` for XPU.
 - oneAPI 2026.0 is the expected toolchain. Source
@@ -27,7 +26,7 @@ can dispatch on Intel GPU hardware.
 
 - Do not use system `python3` or bare `pip` for project work. Use `uv` and the
   repository virtualenv.
-- Create the environment with `uv venv --python 3.12` unless a task explicitly
+- Create the environment with `uv venv --python 3.14` unless a task explicitly
   targets another supported interpreter.
 - Use `.venv/bin/python` in non-interactive commands because shell activation
   does not persist across tool calls.
