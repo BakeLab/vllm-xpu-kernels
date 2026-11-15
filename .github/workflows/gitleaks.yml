@@ -24,11 +24,11 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           if [[ "$EVENT_NAME" == pull_request ]]; then
-            log_opts="--all $PR_BASE_SHA..$HEAD_SHA"
+            log_opts="$PR_BASE_SHA..$HEAD_SHA"
           elif [[ "$PUSH_BEFORE_SHA" =~ ^0+$ ]]; then
             log_opts="--all"
           else
-            log_opts="--all $PUSH_BEFORE_SHA..$HEAD_SHA"
+            log_opts="$PUSH_BEFORE_SHA..$HEAD_SHA"
           fi
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/repo" \
