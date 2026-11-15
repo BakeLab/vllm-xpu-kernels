@@ -43,7 +43,7 @@ env:
 
 jobs:
   resolve-wheel-artifact:
-    runs-on: self-hosted-bmg
+    runs-on: [self-hosted, linux, x64, xpu]
     if: |
       (github.event_name == 'workflow_run' &&
        github.event.workflow_run.conclusion == 'success') ||
@@ -212,7 +212,7 @@ jobs:
             core.setOutput('head_branch', headBranch);
 
   build-docker-image-bmg:
-    runs-on: self-hosted-bmg
+    runs-on: [self-hosted, linux, x64, xpu]
     needs: resolve-wheel-artifact
     if: needs.resolve-wheel-artifact.outputs.should_run == 'true'
     outputs:
@@ -243,7 +243,7 @@ jobs:
           docker push "${{ env.REGISTRY }}/xpu-kernel-ci-image:${IMAGE_TAG}"
 
   run-benchmarks-bmg:
-    runs-on: self-hosted-bmg
+    runs-on: [self-hosted, linux, x64, xpu]
     needs: [resolve-wheel-artifact, build-docker-image-bmg]
     if: needs.resolve-wheel-artifact.outputs.should_run == 'true'
     timeout-minutes: 240
@@ -394,7 +394,7 @@ jobs:
           key: benchmark-baseline-${{ github.event.repository.default_branch }}-${{ github.run_id }}
 
   clean-repo-bmg:
-    runs-on: self-hosted-bmg
+    runs-on: [self-hosted, linux, x64, xpu]
     needs: [resolve-wheel-artifact, run-benchmarks-bmg]
     if: always() && needs.resolve-wheel-artifact.outputs.should_run == 'true'
     steps:
