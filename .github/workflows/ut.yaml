@@ -19,11 +19,8 @@ permissions:
   contents: read
 
 concurrency:
-  # Group by PR number for pull_request, by ref for push/schedule/dispatch.
-  # Only cancel in-progress runs for pull_request events; push to main and schedule are never cancelled.
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
+  group: ut-${{ github.event_name }}-${{ (github.event_name == 'push' || github.event_name == 'pull_request') && (github.event.pull_request.number || github.ref) || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
 env:
   REGISTRY: localhost:5000
   # Nightly (schedule) → full scope; manual dispatch → user choice; PR/push → ci scope

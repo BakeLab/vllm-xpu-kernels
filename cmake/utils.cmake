@@ -82,8 +82,8 @@ function(hipify_sources_target OUT_SRCS NAME ORIG_SRCS)
   set(CSRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/csrc)
   add_custom_target(
     hipify${NAME}
-    COMMAND ${PROJECT_SOURCE_DIR}/cmake/hipify.py -p ${PROJECT_SOURCE_DIR}/csrc -o
-            ${CSRC_BUILD_DIR} ${SRCS}
+    COMMAND ${PROJECT_SOURCE_DIR}/cmake/hipify.py -p ${PROJECT_SOURCE_DIR}/csrc
+            -o ${CSRC_BUILD_DIR} ${SRCS}
     DEPENDS ${PROJECT_SOURCE_DIR}/cmake/hipify.py ${SRCS}
     BYPRODUCTS ${HIP_SRCS}
     COMMENT "Running hipify on ${NAME} extension source files.")

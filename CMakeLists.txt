@@ -285,8 +285,7 @@ if(VLLM_GPU_LANG STREQUAL "SYCL")
   list(APPEND SYCL_FLAGS "-Wno-unused-command-line-argument")
 
   set(SYCL_COMPILE_FLAGS ${SYCL_FLAGS})
-  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG"
-                         "-std=gnu++23")
+  set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} "-O3" "-DNDEBUG" "-std=gnu++23")
   if(AOT_DEVICES)
     set(SYCL_COMPILE_FLAGS ${SYCL_COMPILE_FLAGS} -fsycl-targets=spir64_gen)
   endif()
